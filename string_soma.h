@@ -1,0 +1,1 @@
+int soma_string(int string_entrada);
