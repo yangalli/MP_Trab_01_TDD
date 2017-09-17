@@ -49,11 +49,11 @@ gtest_main.a : gtest-all.o gtest_main.o
 # gtest_main.a, depending on whether it defines its own main()
 # function.
 
-string_soma.o : $(USER_DIR)/string_soma.cc $(USER_DIR)/string_soma.h $(GTEST_HEADERS)
+string_soma.o : $(USER_DIR)/string_soma.cc $(USER_DIR)/string_soma.hpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/string_soma.cc
 
 testa_soma_string.o : $(USER_DIR)/testa_soma_string.cc \
-                     $(USER_DIR)/string_soma.h $(GTEST_HEADERS)
+                     $(USER_DIR)/string_soma.hpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/testa_soma_string.cc
 
 testa_soma_string : string_soma.o testa_soma_string.o gtest_main.a
