@@ -2,6 +2,10 @@
 #include <gtest/gtest.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <cstring>
+#include <string>
+#include <iostream>
+#include <algorithm>
 
 
 TEST(TesteDaSoma, NosPositivos){
@@ -12,6 +16,11 @@ TEST(TesteDaSoma, NosPositivos){
 TEST(TesteDaSoma, ValidaChar){
 	ASSERT_EQ(0, soma_string_char('a'));
 	ASSERT_EQ(0, soma_string_char('b'));
+}
+
+TEST(TesteDaSoma, ValidaString){
+	ASSERT_EQ(0, soma_string("gaucho"));
+	ASSERT_EQ(0, soma_string("ronaldinho"));
 }
 
 TEST(TesteDaSoma, ValidaNo){
@@ -32,11 +41,27 @@ TEST(TesteDaSoma, ValidaDelimitador){
 }
 
 TEST(TesteDaSoma, ValidaNoDelimitadores){ 
-	ASSERT_EQ(4, conta_delimitadores(",,,,  "));
-	ASSERT_EQ(3, conta_delimitadores("/,,, "));
+	ASSERT_EQ(4, conta_delimitaNo(",,,,  "));
+	ASSERT_EQ(3, conta_delimitaNo("/,,, "));
 }
 
+TEST(TesteDaSoma, ValidaNoAlgarismos){ 
+	ASSERT_EQ(true, valida_algarismos_linha("1\n"));
+	ASSERT_EQ(true, valida_algarismos_linha("14\n"));
+	ASSERT_EQ(true, valida_algarismos_linha("123\n"));
+	ASSERT_EQ(false, valida_algarismos_linha("1234\n"));
+}
 
+/*TEST(TesteDaSoma, CheckStack){
+	ASSERT_EQ(3, test_stack(2));
+}*/
+
+TEST(TesteDaSoma, ValidaSomaUmAlgarismo){ 
+	ASSERT_EQ(3, valida_soma_um_algarismo("2,2\n"));
+	ASSERT_EQ(5, valida_soma_um_algarismo("1,4\n"));
+	ASSERT_EQ(5, valida_soma_um_algarismo("1,2,2\n"));
+	ASSERT_EQ(10, valida_soma_um_algarismo("1,2,3,4\n"));
+}
 
 
 

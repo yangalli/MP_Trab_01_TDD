@@ -1,7 +1,12 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+#include <string>
+#include <cstring>
+#include <stack>
+#include <algorithm>
+#include <iostream>
 
+//using namespace std;
 
 int soma_string_num(int numero){
     return numero;
@@ -19,8 +24,8 @@ bool verifica_numero(char ch) {
 
 int conta_numeros_string(const char * string_entrada){
 	int j = 1, contador = 0;
-	int tamanho = strlen(string_entrada);
-	for (int i = 0; i < tamanho; i++) {
+	int tamanho_string = strlen(string_entrada);
+	for (int i = 0; i < tamanho_string; i++) {
 		if (verifica_numero(string_entrada[i]) == true) {
 			while (verifica_numero(string_entrada[i+j] == true)) {
 				i++;
@@ -31,23 +36,80 @@ int conta_numeros_string(const char * string_entrada){
 	return contador;
 }
 
-bool valida_delimitaNo_virgula(char *delimitaNo) {
-  	char delimitador[] = ",";
+bool valida_delimitaNo_virgula(const char *delimitaNo) {
+  	char delimitador[1];
+  	strcpy(delimitador, ",");
   	if (strcmp(delimitaNo, delimitador) == 0)
   		return true;
   	else
   		return false;
 }
 
-int conta_delimitadores(const char *string_entrada) {
-	int contador = 0, tamanho = strlen(string_entrada);
+int conta_delimitaNo (const char *string_entrada) {
+	int no_delimitadores = 0, tamanho_string = strlen(string_entrada);
 	char delimitador = ',';
-	for (int i = 0; i < tamanho; i++) {
+	for (int i = 0; i < tamanho_string; i++) {
 		if (string_entrada[i] == delimitador) 
-			contador++;
+			no_delimitadores++;
 	}
-	return contador;
+	return no_delimitadores;
 }
+
+
+bool valida_algarismos_linha(const char * string_entrada) {
+	int no_algarismos;
+	int tamanho_string = strlen(string_entrada);
+	for (int i = 0; i < tamanho_string; i++) {
+		no_algarismos = 0;
+		while (string_entrada[i] != '\n') {
+			if (verifica_numero(string_entrada[i]) == true) 
+				no_algarismos++;
+			i++;
+		}
+		if (no_algarismos > 3) 
+			return false;
+	}
+	return true;
+}
+
+//prototipo da funcao para uma soma de numeros com um algarismo
+
+int valida_soma_um_algarismo(const char * string_entrada){
+	int tamanho_string = strlen(string_entrada);
+	int j = 0, i = 0, soma = 0;
+	char output[10];
+	for (i = 0; i < tamanho_string; i++) {
+		for (j = 0; j < 10; j++){
+			while (string_entrada[i] != '\n') {
+				if (verifica_numero(string_entrada[i]) == true){
+					if (string_entrada[i] != ','){
+						output[j] = string_entrada[i];
+						j++;
+					}
+					i++;
+				}
+			}
+		}
+	}
+	for (j = 0; j < 10; j++) {
+		soma = soma + output[j];
+	}
+	return soma;
+}
+
+
+
+/*int test_stack(int valor){
+	int rolando;
+	stack <int> cards;
+	cards.push(1);
+	cards.push(2);
+	cards.push(3);
+	rolando = cards.top();
+
+	return rolando;
+}*/
+
 
 int soma_string(const char * string_entrada){
 	return 0;
