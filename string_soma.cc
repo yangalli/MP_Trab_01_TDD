@@ -44,7 +44,7 @@ bool valida_numeros_linha(const char * string_entrada) {
 	return true;
 }
 
-bool valida_delimitaNo_virgula(const char *delimitaNo) {
+bool valida_delimitaNo_virgula(const char * delimitaNo) {
   	char delimitador[1];
   	strcpy(delimitador, ",");
   	if (strcmp(delimitaNo, delimitador) == 0)
@@ -52,6 +52,48 @@ bool valida_delimitaNo_virgula(const char *delimitaNo) {
   	else
   		return false;
 }
+
+int conta_delimitaNo (const char *string_entrada) {
+	int no_delimitadores = 0, tamanho_string = strlen(string_entrada);
+	char delimitador = ',';
+	for (int i = 0; i < tamanho_string; i++) {
+		if (string_entrada[i] == delimitador) 
+			no_delimitadores++;
+		if(string_entrada[i] == delimitador && string_entrada[i+1] == delimitador)
+			return -1;
+	}	
+	return no_delimitadores;
+}
+
+bool valida_virgulas_linha(const char * string_entrada, const char * delimitaNo){
+	char * input = strdup(string_entrada);
+	if (conta_delimitaNo(input) == -1)
+		return false;
+	return true;
+}
+
+bool valida_inicio(const char * string_entrada){
+	char * input = strdup(string_entrada);
+	int i = 0;
+	if (verifica_numero(input[i]) || input[i] == '/' )
+		return true;
+	return false;
+}
+
+int valida_soma_um_algarismo(const char * string_entrada){
+	int tamanho_string = strlen(string_entrada);
+	int i, soma = 0;
+	char output[20], ch;
+	for (i = 0; i < tamanho_string; i++){
+		ch = string_entrada[i];
+		if (isdigit(ch)){
+			output[0] = ch;
+			soma = soma + atoi(output);
+		}
+	}
+	return soma;
+}
+
 
 int soma_string(const char * string_entrada){
 	char delimitaNo[] = ",";
@@ -61,7 +103,11 @@ int soma_string(const char * string_entrada){
 		return -1;
 	if(!valida_delimitaNo_virgula(delimitaNo))
 		return -1;
-	return 0;
+	if (!valida_virgulas_linha(string_entrada, delimitaNo))
+		return -1;
+	if (!valida_inicio(string_entrada))
+		return -1;
+	return valida_soma_um_algarismo(string_entrada);
 }
 
 

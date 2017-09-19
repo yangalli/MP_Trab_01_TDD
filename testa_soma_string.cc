@@ -42,13 +42,25 @@ TEST(TesteDaSoma, ValidaNoAlgarismos){
 	ASSERT_EQ(false, valida_numeros_linha("1234\n"));
 }
 
-TEST(TesteDaSoma, TesteGeralSoma){ 
-	ASSERT_EQ(0, soma_string("1,2\n"));
-	ASSERT_EQ(-1, soma_string("14"));
-	ASSERT_EQ(-1, soma_string("12334,2\n"));
-	ASSERT_EQ(0, soma_string("12,3\n"));
-	ASSERT_EQ(0, soma_string("12,,3\n"));
-	ASSERT_EQ(0, soma_string("1,2,3\n"));
+TEST(TesteDaSoma, ValidaNoDelimitadores){ 
+	ASSERT_EQ(3, conta_delimitaNo(",/,/,  "));
+	ASSERT_EQ(3, conta_delimitaNo("1,2,3,4 "));
+	ASSERT_EQ(-1, conta_delimitaNo("1,,3,4 "));
+	ASSERT_EQ(-1, conta_delimitaNo("1,2,3,4,,"));
+	ASSERT_EQ(4, conta_delimitaNo("/,2,/,1,"));
+}
+
+TEST(TesteDaSoma, TesteGeralSomaVirgulaDelimitador){ 
+	ASSERT_EQ(3, soma_string("1,2\n"));
+	ASSERT_EQ(6, soma_string("3,2,1\n"));
+	ASSERT_EQ(-1, soma_string(",2\n"));
+	ASSERT_EQ(-1, soma_string("1,,2\n"));
+	ASSERT_EQ(-1, soma_string(",\n"));
+	//ASSERT_EQ(-1, soma_string("1;2\n"));
+	ASSERT_EQ(-1, soma_string("1,2"));
+	ASSERT_EQ(3, soma_string("1\n,2\n"));
+	ASSERT_EQ(5, soma_string("1\n\n\n,4\n"));
+	ASSERT_EQ(4, soma_string("1\n\n\n,\n\n\n3\n"));
 }
 
 
