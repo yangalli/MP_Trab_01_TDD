@@ -67,12 +67,30 @@ TEST(TesteDaSoma, TesteGeralSomaVirgulaDelimitador){
 	ASSERT_EQ(10, soma_string("1,2,3\n,4\n"));
 }
 
+TEST(TesteDaSoma, TesteSomaTresAlgarismos){ 
+	ASSERT_EQ(300, valida_soma_tres_algarismos("100,200\n"));
+	ASSERT_EQ(221, valida_soma_tres_algarismos("10,211\n"));
+	ASSERT_EQ(104, valida_soma_tres_algarismos("99,5\n"));
+	ASSERT_EQ(321, valida_soma_tres_algarismos("1,20,300\n"));
+	ASSERT_EQ(117, valida_soma_tres_algarismos("1,2,4,10,100\n"));
+}
+
 TEST(TesteDaSoma, TesteGeralSomaDoisAlgarismos){ 
 	ASSERT_EQ(40, soma_string("12,3,25\n"));
 	ASSERT_EQ(104, soma_string("99,5\n"));
 	ASSERT_EQ(19, soma_string("12,3,4\n"));
 	ASSERT_EQ(29, soma_string("12,13,4\n"));
 	ASSERT_EQ(-1, soma_string("12,13,4,20\n"));
+}
+
+TEST(TesteDaSoma, TesteGeralSomaTresAlgarismos){ 
+	//ASSERT_EQ(111, soma_string("1,10,100\n"));
+	ASSERT_EQ(300, soma_string("100,200\n"));
+	ASSERT_EQ(30, soma_string("10,20\n"));
+	ASSERT_EQ(124, soma_string("1,12,111\n"));
+	ASSERT_EQ(111, soma_string("100,10,1\n"));
+	ASSERT_EQ(-1, soma_string("12,13,4,20\n"));
+
 }
 
 

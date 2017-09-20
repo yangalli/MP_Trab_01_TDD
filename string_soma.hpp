@@ -10,4 +10,5 @@ bool valida_virgulas_linha(const char * string_entrada);
 int valida_soma_um_algarismo(const char * string_entrada);
 bool valida_inicio(const char * string_entrada);
 int valida_soma_dois_algarismos (const char * string_entrada);
+int valida_soma_tres_algarismos (const char * string_entrada);
 
