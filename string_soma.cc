@@ -10,7 +10,7 @@ int soma_string_num(int numero){
 }
 
 int soma_string_char(char string_entrada){
-	return 0;
+	return string_entrada;
 }
 
 //garante que apenas numeros positivos sao validos
@@ -30,9 +30,19 @@ bool valida_final(const char *string_entrada){
 	return true;
 }
 
-//valida o total de numeros por linha, que e de no maximo 3
+//analisa se a string de entrada possui o inicio valido, ou seja, se comeca em numero ou '/'
 
-bool valida_numeros_linha(const char * string_entrada) {
+bool valida_inicio(const char * string_entrada){
+	char * input = strdup(string_entrada);
+	int i = 0;
+	if (verifica_numero(input[i]) || input[i] == '/' )
+		return true;
+	return false;
+}
+
+//retorna o total de numeros por linha, que e de no maximo 3
+
+int conta_numeros_linha(const char * string_entrada) {
 	int no_algarismos, tamanho_string = strlen(string_entrada);
 	char * input = strdup(string_entrada);
 	for (int i = 0; i < tamanho_string; i++) {
@@ -61,20 +71,18 @@ bool valida_numeros_linha(const char * string_entrada) {
 			i++;
 		}
 		if (no_algarismos > 3) 
-			return false;
+			return -1;
 	}
-	return true;
+	return no_algarismos;
 }
 
-//valida a virgula como delimitador para a funcao soma_string
+//valida o total de numeros por linha
 
-bool valida_delimitaNo_virgula(const char * delimitaNo) {
-  	char delimitador[1];
-  	strcpy(delimitador, ",");
-  	if (strcmp(delimitaNo, delimitador) == 0)
-  		return true;
-  	else
-  		return false;
+bool valida_numeros_linha(const char * string_entrada){
+	char * input = strdup(string_entrada);
+	if (conta_numeros_linha(input) == -1)
+		return false;
+	return true;
 }
 
 //encontra o numero de delimitadores na funcao e verifica se as virgulas estao seguidas 
@@ -91,6 +99,56 @@ int conta_delimitaNo (const char *string_entrada) {
 	return no_delimitadores;
 }
 
+bool valida_delimitaNo_Geral(const char *string_entrada, char * delimitador) {
+	char *input = strdup(string_entrada);
+	int no_numeros = conta_numeros_linha(input), soma_n, tamanho_string = strlen(input);
+  	for (int i = 0; i < tamanho_string; i++){
+  		if(input[i] == '\n')
+  			soma_n++;
+  	}
+  	if(soma_n >= no_numeros)
+  		return true;
+	else if (!(conta_delimitaNo(input)+1 == no_numeros)) 
+		return false;
+  	return true;
+}
+
+//faz a verificacao do \n no final da declaracao de delimitadores da string_entrada
+
+bool valida_barran_final_delimitaNo(const char *string_entrada){
+	char *input = strdup(string_entrada);
+	char tamanho_string = strlen(input);
+	if (input[0] == '/') {
+		for (int i = 0; i < tamanho_string; i++){
+			if(input[i] == ']'){
+				if(input[i+1] == '[')
+					i++;
+				else if(input[i+1] != '\n')
+					return false;
+			}
+		}
+	}
+	return true;
+}
+
+char *cria_delimitaNo(const char *string_entrada) {
+	char *input = strdup(string_entrada);
+	char numeros_n_vir[] = "01234556789\n,";
+	unsigned int requisito_delimitador = strspn(input, "//[");
+	unsigned int fim_requisito_delimitador = strcspn(input, "]");
+	char *delimitador = (char *) malloc(fim_requisito_delimitador-requisito_delimitador); 
+	if (requisito_delimitador == 3 && fim_requisito_delimitador != strlen(input)){
+		sscanf(input, "//[%s\n%*s", delimitador);
+		delimitador = strtok_r(delimitador, "]", &delimitador);
+		return delimitador;
+	}else if (requisito_delimitador == 0 && fim_requisito_delimitador == strlen(input)) {
+		if (strspn(input, numeros_n_vir) == strlen(input))
+	  		return strdup(",");
+  	}
+	free(delimitador);
+	return NULL;
+}
+
 //se houver mais de uma virgula seguida o programa retorna -1
 
 bool valida_virgulas_linha(const char * string_entrada){
@@ -100,15 +158,6 @@ bool valida_virgulas_linha(const char * string_entrada){
 	return true;
 }
 
-//analisa se a string de entrada possui o inicio valido, ou seja, se comeca em numero ou '/'
-
-bool valida_inicio(const char * string_entrada){
-	char * input = strdup(string_entrada);
-	int i = 0;
-	if (verifica_numero(input[i]) || input[i] == '/' )
-		return true;
-	return false;
-}
 
 //funcao base para a soma de um algarismo, que deu origem as outras funcoes de soma
 
@@ -147,6 +196,8 @@ int valida_soma_dois_algarismos (const char * string_entrada){
 	}
 	return soma;
 }
+
+//possibilita a soma entre numeros com tres algarismos e delimitadores variaveis entre eles
 
 int valida_soma_tres_algarismos (const char * string_entrada){
 	int tamanho_string = strlen(string_entrada);
@@ -195,17 +246,22 @@ int valida_soma_tres_algarismos (const char * string_entrada){
 ****************************************************************************************************/
 
 int soma_string(const char * string_entrada){
-	char delimitaNo[] = ",";
-	if (!valida_inicio(string_entrada))
+	char *delimitaNo;
+	if(!valida_inicio(string_entrada))
 		return -1;
 	if(!valida_final(string_entrada))
 		return -1;
+	if (!(delimitaNo = cria_delimitaNo(string_entrada)))
+		return -1;
 	if(!valida_numeros_linha(string_entrada))
 		return -1;
-	if(!valida_delimitaNo_virgula(delimitaNo))
+	/*if(!valida_delimitaNo_virgula(delimitaNo))
+		return -1;*/
+	if(!valida_barran_final_delimitaNo(string_entrada))
 		return -1;
-	if (!valida_virgulas_linha(string_entrada))
+	if(!valida_delimitaNo_Geral(string_entrada, delimitaNo = cria_delimitaNo(string_entrada)))
 		return -1;
-	
+	if(!valida_virgulas_linha(string_entrada))
+		return -1;
 	return valida_soma_tres_algarismos (string_entrada);
 }

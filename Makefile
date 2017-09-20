@@ -58,3 +58,5 @@ testa_soma_string.o : $(USER_DIR)/testa_soma_string.cc \
 
 testa_soma_string : string_soma.o testa_soma_string.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+gcov:
+	gcovr -r . --html -o coverage.html --html-details
