@@ -65,7 +65,7 @@ int conta_delimitaNo (const char *string_entrada) {
 	return no_delimitadores;
 }
 
-bool valida_virgulas_linha(const char * string_entrada, const char * delimitaNo){
+bool valida_virgulas_linha(const char * string_entrada){
 	char * input = strdup(string_entrada);
 	if (conta_delimitaNo(input) == -1)
 		return false;
@@ -94,27 +94,40 @@ int valida_soma_um_algarismo(const char * string_entrada){
 	return soma;
 }
 
+int valida_soma_dois_algarismos (const char * string_entrada){
+	int tamanho_string = strlen(string_entrada);
+	int i, soma = 0;
+	char output[20], output1[20], ch, ch1;
+	for (i = 0; i < tamanho_string; i++){
+		ch = string_entrada[i];
+		ch1 = string_entrada[i+1];
+		if (isdigit(ch) && isdigit(ch1)){
+			output[0] = ch;
+			output1[0] = ch1;
+			soma += 10*atoi(output) + atoi(output1);
+			i++;
+		}
+		if(isdigit(ch) && !isdigit(ch1)){
+			output[0] = ch;
+			soma += atoi(output);
+			i++;
+		}
+	}
+	return soma;
+}
+
 
 int soma_string(const char * string_entrada){
-	char delimitaNo[] = ",";
+	char delimitaNo[] = ","; 
 	if(!valida_final(string_entrada))
 		return -1;
 	if(!valida_numeros_linha(string_entrada))
 		return -1;
 	if(!valida_delimitaNo_virgula(delimitaNo))
 		return -1;
-	if (!valida_virgulas_linha(string_entrada, delimitaNo))
+	if (!valida_virgulas_linha(string_entrada))
 		return -1;
 	if (!valida_inicio(string_entrada))
 		return -1;
-	return valida_soma_um_algarismo(string_entrada);
+	return valida_soma_dois_algarismos (string_entrada);
 }
-
-
-
-
-
-
-
-
-
