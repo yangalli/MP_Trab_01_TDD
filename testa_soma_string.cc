@@ -67,17 +67,13 @@ TEST(TesteDaSoma, TesteGeralSomaVirgulaDelimitador){
 	ASSERT_EQ(10, soma_string("1,2,3\n,4\n"));
 }
 
-
-
 TEST(TesteDaSoma, TesteGeralSomaDoisAlgarismos){ 
-	//ASSERT_EQ(-1, soma_string("1;2\n"));
-	ASSERT_EQ(15, soma_string("12,3\n"));
+	ASSERT_EQ(40, soma_string("12,3,25\n"));
 	ASSERT_EQ(104, soma_string("99,5\n"));
 	ASSERT_EQ(19, soma_string("12,3,4\n"));
-	ASSERT_EQ(26, soma_string("12,13,4\n"));
-
+	ASSERT_EQ(29, soma_string("12,13,4\n"));
+	ASSERT_EQ(-1, soma_string("12,13,4,20\n"));
 }
-
 
 
 
