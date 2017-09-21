@@ -10,9 +10,6 @@ int main(int argc, char const *argv[])
     int resultado_string_soma;
     char input[50];
 
-    /**
-    * Leitura caracter a caracter de stdin.
-    */
     int i = 0;
     while (ch = getchar() != EOF){
         input[i] = elementos_string;

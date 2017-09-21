@@ -62,9 +62,6 @@ OBJS = string_soma.o testa_soma_string_stdin.o
 testa_soma_string_stdin: $(OBJS)
 	$(CC) $(OBJS) $(EX_FLAGS) -lm -o $@
 
-testa_soma_string_stdin.o: testa_soma_string_stdin.c
-	gcc -c $<
-
 string_soma.o : $(USER_DIR)/string_soma.cc $(USER_DIR)/string_soma.hpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/string_soma.cc
 
