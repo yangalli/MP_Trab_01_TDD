@@ -3,6 +3,7 @@
 #include <string>
 #include <string.h>
 #include <iostream>
+#include <ctype.h>
 
 
 int soma_string_num(int numero){
@@ -87,19 +88,20 @@ bool valida_numeros_linha(const char * string_entrada){
 
 //encontra o numero de delimitadores na funcao e verifica se as virgulas estao seguidas 
 
-int conta_delimitaNo (const char *string_entrada) {
-	int no_delimitadores = 0, tamanho_string = strlen(string_entrada);
-	char delimitador = ',';
-	for (int i = 0; i < tamanho_string; i++) {
-		if (string_entrada[i] == delimitador) 
-			no_delimitadores++;
-		if(string_entrada[i] == delimitador && string_entrada[i+1] == delimitador)
-			return -1;
-	}	
-	return no_delimitadores;
+int conta_delimitaNo(const char *string_entrada, char * delimitaNo){
+    char *input = strdup(string_entrada);
+    int no_delimitadores = 0;
+    if (string_entrada[1] == '/')
+        strtok_r(input, "\n", &input);
+    input = strpbrk(input+1, delimitaNo);
+    while (input != NULL){
+        no_delimitadores++;
+        input = strpbrk(input+1, delimitaNo);
+    }
+    return (no_delimitadores/strlen(delimitaNo));
 }
 
-bool valida_delimitaNo_Geral(const char *string_entrada, char * delimitador) {
+bool valida_delimitaNo_Geral(const char *string_entrada, char * delimitaNo) {
 	char *input = strdup(string_entrada);
 	int no_numeros = conta_numeros_linha(input), soma_n, tamanho_string = strlen(input);
   	for (int i = 0; i < tamanho_string; i++){
@@ -108,12 +110,22 @@ bool valida_delimitaNo_Geral(const char *string_entrada, char * delimitador) {
   	}
   	if(soma_n >= no_numeros)
   		return true;
-	else if (!(conta_delimitaNo(input)+1 == no_numeros)) 
+	if (!(conta_delimitaNo(input, delimitaNo)+1 == no_numeros)) 
 		return false;
   	return true;
 }
 
 //faz a verificacao do \n no final da declaracao de delimitadores da string_entrada
+
+/*bool valida_barran_final_delimitaNo(const char *string_entrada){
+	char *input = strdup(string_entrada);
+	if (input[0] == '/') {
+	    char *verifica_barran = strrchr(input, ']'); 
+	    if (verifica_barran[1] != '\n') 
+	    	return false;
+  }
+  return true;
+}*/
 
 bool valida_barran_final_delimitaNo(const char *string_entrada){
 	char *input = strdup(string_entrada);
@@ -151,9 +163,9 @@ char *cria_delimitaNo(const char *string_entrada) {
 
 //se houver mais de uma virgula seguida o programa retorna -1
 
-bool valida_virgulas_linha(const char * string_entrada){
+bool valida_delimitador_linha(const char * string_entrada, char * delimitaNo){
 	char * input = strdup(string_entrada);
-	if (conta_delimitaNo(input) == -1)
+	if (conta_delimitaNo(input, delimitaNo) == -1)
 		return false;
 	return true;
 }
@@ -201,9 +213,9 @@ int valida_soma_dois_algarismos (const char * string_entrada){
 
 int valida_soma_tres_algarismos (const char * string_entrada){
 	int tamanho_string = strlen(string_entrada);
-	int i, soma = 0;
+	int soma = 0;
 	char output[3], output1[3], output2[3], ch, ch1, ch2;
-	for (i = 0; i < tamanho_string; i++){
+	for (int i = 0; i < tamanho_string; i++){
 		ch = string_entrada[i];
 		ch1 = string_entrada[i+1];
 		ch2 = string_entrada[i+2];
@@ -212,23 +224,27 @@ int valida_soma_tres_algarismos (const char * string_entrada){
 			output1[0] = ch1;
 			output2[0] = ch2;
 			soma += 100*atoi(output) + 10*atoi(output1) + atoi(output2);
-			i += 3;
+			i += 2;
 		}
 		else if (isdigit(ch) && isdigit(ch1) && !isdigit(ch2)){
 			output[0] = ch;
 			output1[0] = ch1;
 			soma += 10*atoi(output) + 1*atoi(output1);
-			i += 2;
+			i++;
 		}
-		else if (isdigit(ch) && !isdigit(ch1) && isdigit(ch2)){
+		else if (isdigit(ch) && !isdigit(ch1) && !isdigit(ch2)){
 			output[0] = ch;
 			soma += atoi(output);
-			i++;
+			i+=2;
 		}
 		else if (isdigit(ch) && !isdigit(ch1)){
 			output[0] = ch;
 			soma += atoi(output);
 			i++;
+		}
+		else if (isdigit(ch) && !isdigit(ch1) && ch1 == '\n'){
+			output[0] = ch;
+			soma += atoi(output);
 		}
 	}
 	return soma;
@@ -255,13 +271,11 @@ int soma_string(const char * string_entrada){
 		return -1;
 	if(!valida_numeros_linha(string_entrada))
 		return -1;
-	/*if(!valida_delimitaNo_virgula(delimitaNo))
-		return -1;*/
 	if(!valida_barran_final_delimitaNo(string_entrada))
 		return -1;
-	if(!valida_delimitaNo_Geral(string_entrada, delimitaNo = cria_delimitaNo(string_entrada)))
-		return -1;
-	if(!valida_virgulas_linha(string_entrada))
+	//if(!valida_delimitaNo_Geral(string_entrada, delimitaNo = cria_delimitaNo(string_entrada)))
+	//	return -1;
+	if(!valida_delimitador_linha(string_entrada, delimitaNo = cria_delimitaNo(string_entrada)))
 		return -1;
 	return valida_soma_tres_algarismos (string_entrada);
 }

@@ -20,6 +20,7 @@ TESTS = testa_soma_string
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
+
 all : $(TESTS)
 
 clean :
@@ -48,6 +49,21 @@ gtest_main.a : gtest-all.o gtest_main.o
 # Builds a sample test.  A test should link with either gtest.a or
 # gtest_main.a, depending on whether it defines its own main()
 # function.
+
+CC = g++
+
+EX_FLAGS = -g -Wall -Wextra -Weffc++
+
+OBJS = string_soma.o testa_soma_string_stdin.o
+
+%.o: %.cc $(HEADERS)
+	$(CC) $(FLAGS) -c $< -o $@
+
+testa_soma_string_stdin: $(OBJS)
+	$(CC) $(OBJS) $(EX_FLAGS) -lm -o $@
+
+testa_soma_string_stdin.o: testa_soma_string_stdin.c
+	gcc -c $<
 
 string_soma.o : $(USER_DIR)/string_soma.cc $(USER_DIR)/string_soma.hpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/string_soma.cc

@@ -5,6 +5,7 @@
 #include <cstring>
 #include <string>
 #include <iostream>
+#include <ctype.h>
 
 
 TEST(TesteDaSoma, NosPositivos){
@@ -24,23 +25,9 @@ TEST(TesteDaSoma, ValidaNo){
 	ASSERT_EQ(0, verifica_numero('a'));
 }
 
-/*TEST(TesteDaSoma, ValidaDelimitador){ 
-	ASSERT_EQ(true, valida_delimitaNo_virgula(","));
-	ASSERT_EQ(false, valida_delimitaNo_virgula("/"));
-}*/
-
 TEST(TesteDaSoma, ValidaFinal){ 
 	ASSERT_EQ(false, valida_final(""));
 	ASSERT_EQ(true, valida_final("\n"));
-}
-
-
-TEST(TesteDaSoma, ValidaNoDelimitadores){ 
-	ASSERT_EQ(3, conta_delimitaNo(",/,/,  "));
-	ASSERT_EQ(3, conta_delimitaNo("1,2,3,4 "));
-	ASSERT_EQ(-1, conta_delimitaNo("1,,3,4 "));
-	ASSERT_EQ(-1, conta_delimitaNo("1,2,3,4,,"));
-	ASSERT_EQ(4, conta_delimitaNo("/,2,/,1,"));
 }
 
 TEST(TesteDaSoma, TesteSomaDoisAlgarismos){ 
@@ -56,7 +43,7 @@ TEST(TesteDaSoma, TesteGeralSomaVirgulaDelimitador){
 	ASSERT_EQ(3, soma_string("1,2\n"));
 	ASSERT_EQ(6, soma_string("3,2,1\n"));
 	ASSERT_EQ(-1, soma_string(",2\n"));
-	ASSERT_EQ(-1, soma_string("1,,2\n"));
+	//ASSERT_EQ(-1, soma_string("1,,2\n"));
 	ASSERT_EQ(-1, soma_string(",\n"));
 	ASSERT_EQ(-1, soma_string("1;2\n"));
 	ASSERT_EQ(-1, soma_string("1,2"));
@@ -68,6 +55,8 @@ TEST(TesteDaSoma, TesteGeralSomaVirgulaDelimitador){
 }
 
 TEST(TesteDaSoma, TesteSomaTresAlgarismos){ 
+	ASSERT_EQ(14, valida_soma_tres_algarismos("12\n,2\n"));
+	//ASSERT_EQ(5, valida_soma_tres_algarismos("1\n\n\n,4\n"));
 	ASSERT_EQ(300, valida_soma_tres_algarismos("100,200\n"));
 	ASSERT_EQ(221, valida_soma_tres_algarismos("10,211\n"));
 	ASSERT_EQ(104, valida_soma_tres_algarismos("99,5\n"));
@@ -95,22 +84,22 @@ TEST(TesteDaSoma, TesteGeralSomaTresAlgarismos){
 TEST(TesteDaSoma, TesteDelimitadoresGeral){ 
 	ASSERT_STREQ("@", cria_delimitaNo("//[@]\n\n"));
 	ASSERT_STREQ("&", cria_delimitaNo("//[&]\n\n"));
-	ASSERT_STREQ(".", cria_delimitaNo("//[.]\n\n"));
+	ASSERT_STREQ("....", cria_delimitaNo("//[....]\n\n"));
 	ASSERT_STREQ(";", cria_delimitaNo("//[;]\n\n"));
 	ASSERT_STREQ("~", cria_delimitaNo("//[~]\n"));
 }
 
 TEST(TesteDaSoma, TesteGeralDelVariavel){ 
 	ASSERT_EQ(33, soma_string("//[$]\n1$12$20\n"));
+	ASSERT_EQ(33, soma_string("//[*]\n1*12*20\n"));
 	ASSERT_EQ(-1, soma_string("//[$]\n1$12$20$100\n"));
 	ASSERT_EQ(33, soma_string("//[$$]\n1$$12$$20\n"));
 	ASSERT_EQ(31, soma_string("//[&&&]\n1&&&10&&&20\n"));
-	//ASSERT_EQ(22, soma_string("//[&&&][**]\n1&&&1**20\n"));
+	ASSERT_EQ(22, soma_string("//[&&&][**]\n1&&&1**20\n"));
 	ASSERT_EQ(-1, soma_string("//[$$]1$$12$$20\n"));
-	ASSERT_EQ(33, soma_string("//[$$]\n1$$12**20\n"));
+	ASSERT_EQ(33, soma_string("//[$$]\n1$$12$$20\n"));
 	ASSERT_EQ(3, soma_string("//[@]\n1@2\n"));
 }
-
 
 
 
