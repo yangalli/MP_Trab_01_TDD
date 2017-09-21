@@ -104,7 +104,12 @@ int conta_delimitaNo(const char *string_entrada, char * delimitaNo){
 bool valida_delimitaNo_Geral(const char *string_entrada, char * delimitaNo) {
 	char *input = strdup(string_entrada);
 	int no_numeros = conta_numeros_linha(input), soma_n, tamanho_string = strlen(input);
-  	for (int i = 0; i < tamanho_string; i++){
+	if (string_entrada[1] == '/'){
+        if ((*(strrchr(string_entrada, ']') + 1)) != '\n')
+        	return false;
+    else if (!(strpbrk(input, delimitaNo))) 
+    	return true;
+    }for (int i = 0; i < tamanho_string; i++){
   		if(input[i] == '\n')
   			soma_n++;
   	}
@@ -117,15 +122,6 @@ bool valida_delimitaNo_Geral(const char *string_entrada, char * delimitaNo) {
 
 //faz a verificacao do \n no final da declaracao de delimitadores da string_entrada
 
-/*bool valida_barran_final_delimitaNo(const char *string_entrada){
-	char *input = strdup(string_entrada);
-	if (input[0] == '/') {
-	    char *verifica_barran = strrchr(input, ']'); 
-	    if (verifica_barran[1] != '\n') 
-	    	return false;
-  }
-  return true;
-}*/
 
 bool valida_barran_final_delimitaNo(const char *string_entrada){
 	char *input = strdup(string_entrada);
@@ -262,20 +258,20 @@ int valida_soma_tres_algarismos (const char * string_entrada){
 ****************************************************************************************************/
 
 int soma_string(const char * string_entrada){
-	char *delimitaNo;
+	char *delimitaNo = cria_delimitaNo(string_entrada);
 	if(!valida_inicio(string_entrada))
 		return -1;
 	if(!valida_final(string_entrada))
 		return -1;
-	if (!(delimitaNo = cria_delimitaNo(string_entrada)))
+	if (!(delimitaNo))
 		return -1;
 	if(!valida_numeros_linha(string_entrada))
 		return -1;
 	if(!valida_barran_final_delimitaNo(string_entrada))
 		return -1;
-	//if(!valida_delimitaNo_Geral(string_entrada, delimitaNo = cria_delimitaNo(string_entrada)))
-	//	return -1;
-	if(!valida_delimitador_linha(string_entrada, delimitaNo = cria_delimitaNo(string_entrada)))
+	if(!valida_delimitaNo_Geral(string_entrada, delimitaNo))
+		return -1;
+	if(!valida_delimitador_linha(string_entrada, delimitaNo))
 		return -1;
 	return valida_soma_tres_algarismos (string_entrada);
 }
