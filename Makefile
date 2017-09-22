@@ -1,3 +1,6 @@
+# O googletestmaster foi enviado na pasta do makefile, então para que os testes possam ser rodados
+# o GTEST_DIR = googletest-master/googletest
+
 GTEST_DIR = ../../Gtest/googletest-master/googletest
 
 # Where to find user code.
