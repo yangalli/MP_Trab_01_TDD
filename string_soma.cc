@@ -41,7 +41,19 @@ bool valida_inicio(const char * string_entrada){
 	return false;
 }
 
-//retorna o total de numeros por linha, que e de no maximo 3
+/*****************************************************************************
+* 
+* Retorna o total de numeros por linha, que é de no máximo 3.
+* Enquanto o char verificado não for o final da string_entrada,
+* ocorre primeiro uma checagem se o char contido na string é um
+* número. Se o char verificado for um número, ocorre mais uma checagem
+* se o próximo char é numero. Se este segundo char for um número, ocorre mais
+* uma checagem se o terceiro char é também um número. Se os três primeiros 
+* forem números, quer dizer que é um número de três algarismos; se os dois 
+* primeiros forem numeros, o numero possui 2 algarismos; se apenas o primeiro 
+* for algarismo, o número possui apenas um algarismo.
+*
+******************************************************************************/
 
 int conta_numeros_linha(const char * string_entrada) {
 	int no_algarismos, tamanho_string = strlen(string_entrada);
@@ -86,7 +98,14 @@ bool valida_numeros_linha(const char * string_entrada){
 	return true;
 }
 
-//encontra o numero de delimitadores na funcao e verifica se as virgulas estao seguidas 
+/**************************************************************************
+*
+* Encontra o numero de delimitadores na função, por meio do strtok_r, 
+* que delimita tokens (delimitadores) dentro da string_entrada, que no
+* caso é o "\n". A partir disso consegue contar o numero de delimitadores
+* presentes na string_entrada.
+*
+**************************************************************************/
 
 int conta_delimitaNo(const char *string_entrada, char * delimitaNo){
     char *input = strdup(string_entrada);
@@ -101,6 +120,15 @@ int conta_delimitaNo(const char *string_entrada, char * delimitaNo){
     return (no_delimitadores/strlen(delimitaNo));
 }
 
+/**************************************************************************
+*  
+* Essa função valida os delimitadores que são passados na string_entrada. 
+* Se não tiver delimitadores passados pela string, a virgula é o delimitador.
+* Quando existem mais delimitadores que número, a string_entrada deve ser 
+* invalidada.
+*
+**************************************************************************/
+
 bool valida_delimitaNo_Geral(const char *string_entrada, char * delimitaNo) {
 	char *input = strdup(string_entrada);
 	int no_numeros = conta_numeros_linha(input), soma_n, tamanho_string = strlen(input);
@@ -108,6 +136,8 @@ bool valida_delimitaNo_Geral(const char *string_entrada, char * delimitaNo) {
         if ((*(strrchr(string_entrada, ']') + 1)) != '\n')
         	return false;
     else if (!(strpbrk(input, delimitaNo))) 
+    	return true;
+    else if (!(strpbrk(string_entrada, delimitaNo))) 
     	return true;
     }for (int i = 0; i < tamanho_string; i++){
   		if(input[i] == '\n')
@@ -120,8 +150,15 @@ bool valida_delimitaNo_Geral(const char *string_entrada, char * delimitaNo) {
   	return true;
 }
 
-//faz a verificacao do \n no final da declaracao de delimitadores da string_entrada
 
+/*********************************************************************************
+*  
+*  Essa função faz a verificação do '\n' no final da declaração de delimitadores
+*  na string de entrada. As únicas possibilidades de chars na string após um ']'
+*  são um '\n' e um '['. Se não houver um 'n' no final do último delimitador
+*  a ser criado a função principal deve retornar -1. 
+*
+**********************************************************************************/
 
 bool valida_barran_final_delimitaNo(const char *string_entrada){
 	char *input = strdup(string_entrada);
@@ -138,6 +175,16 @@ bool valida_barran_final_delimitaNo(const char *string_entrada){
 	}
 	return true;
 }
+
+/*********************************************************************************
+*  
+*  Essa função é a responsável por gerar os delimitadores que são escritos na 
+*  string_entrada. Ela usa o malloc para alocar dinamicamente os delimitadores e 
+*  os gera ao analisar os requisitos para que um delimitador seja válido, que são
+*  começar com "//[" e terminar com ']'. O método de delimitador por tokens também 
+*  é utilizado nessa função para alcançar esse objetivo.
+*
+**********************************************************************************/
 
 char *cria_delimitaNo(const char *string_entrada) {
 	char *input = strdup(string_entrada);
@@ -205,7 +252,17 @@ int valida_soma_dois_algarismos (const char * string_entrada){
 	return soma;
 }
 
-//possibilita a soma entre numeros com tres algarismos e delimitadores variaveis entre eles
+//possibilita a soma entre numeros com tres algarismos e delimitadores variaveis entre eles.
+/*********************************************************************************
+*  
+*  Essa função utiliza um método similiar a conta_numeros_linha(). Ocorre uma 
+*  verificação dos números, de modo que três números seguidos forem encontrados,
+*  o primeiro número significa a centena, o segundo a dezena e o terceiro a unidade.
+*  Sendo assim, a conta é validada multiplicando o algarismo da centena por 100, o 
+*  da dezena por 10 e o da unidade por 1.
+*
+**********************************************************************************/
+
 
 int valida_soma_tres_algarismos (const char * string_entrada){
 	int tamanho_string = strlen(string_entrada);
@@ -246,7 +303,7 @@ int valida_soma_tres_algarismos (const char * string_entrada){
 	return soma;
 }
 
-/****************************************************************************************************
+/***************************************************************************************************
 * Para que a funcao principal retorne um valor valido, e necessario que:
 * -seu inicio seja valido;
 * -seu final seja valido;
